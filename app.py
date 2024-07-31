@@ -87,6 +87,7 @@ async def update_book(book_id: int, book : dict,db: Session = Depends(get_db)):
     db_item.description = book['description']
     db_item.abbre_title = book['abbre_title']
     db_item.category = book['category']
+    db_item.image_url = book['image_url']
 
     db.commit()
     db.refresh(db_item)
