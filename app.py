@@ -58,7 +58,8 @@ async def get_order(order_id: int, db: Session = Depends(get_db)):
 @router_v1.post('/books')
 async def create_book(book: dict, response: Response, db: Session = Depends(get_db)):
     # TODO: Add validation
-    newbook = models.Book(title=book['title'], author=book['author'], year=book['year'], is_published=book['is_published'], description=book['description'], abbre_title=book['abbre_title'], category=book['category'], image=book['image_url'])
+    newbook = models.Book(title=book['title'], author=book['author'], year=book['year'], is_published=book['is_published'], description=book['description'], 
+                          abbre_title=book['abbre_title'], category=book['category'], image_url=book['image_url'])
     db.add(newbook)
     db.commit()
     db.refresh(newbook)
@@ -68,7 +69,7 @@ async def create_book(book: dict, response: Response, db: Session = Depends(get_
 @router_v1.post('/menu')
 async def create_menu(menu: dict, response: Response, db: Session = Depends(get_db)):
     # TODO: Add validation
-    newmenu = models.Menu(title=menu['title'], price=menu['price'], image=menu['image_url'])
+    newmenu = models.Menu(title=menu['title'], price=menu['price'], image_url=menu['image_url'])
     db.add(newmenu)
     db.commit()
     db.refresh(newmenu)
