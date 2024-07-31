@@ -70,6 +70,7 @@ async def create_book(book: dict, response: Response, db: Session = Depends(get_
 async def create_menu(menu: dict, response: Response, db: Session = Depends(get_db)):
     # TODO: Add validation
     newmenu = models.Menu(title=menu['title'], price=menu['price'], image_url=menu['image_url'])
+    
     db.add(newmenu)
     db.commit()
     db.refresh(newmenu)
@@ -93,10 +94,32 @@ async def update_book(book_id: int, book : dict,db: Session = Depends(get_db)):
     db.refresh(db_item)
     return {'message' : 'Update success'}
 
+@router_v1.patch('/menu/{menu_id}')
+async def update_menu(menu_id: int, menu : dict,db: Session = Depends(get_db)):
+    db_item = db.query(models.Menu).filter(models.Menu.id == menu_id).first()
+    if not db_item:
+        return {'message' : 'Not found'}
+    db_item.title = menu['title']
+    db_item.price = menu['price']
+    db_item.image_url = menu['image_url']
+
+    db.commit()
+    db.refresh(db_item)
+    return {'message' : 'Update success'}
+
 
 @router_v1.delete('/books/{book_id}')
-async def delete_student(book_id: int, db: Session = Depends(get_db)):
+async def delete_book(book_id: int, db: Session = Depends(get_db)):
     db_item = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if not db_item:
+        return {'message' : 'Not found'}
+    db.delete(db_item)
+    db.commit()
+    return {'Delete Success' : True}
+
+@router_v1.delete('/menu/{menu_id}')
+async def delete_menu(menu: int, db: Session = Depends(get_db)):
+    db_item = db.query(models.Menu).filter(models.Menu.id == menu).first()
     if not db_item:
         return {'message' : 'Not found'}
     db.delete(db_item)
